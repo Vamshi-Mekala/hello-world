@@ -1,0 +1,30 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: BuildAndDeploy
+  displayName: 'Build and Deploy Job'
+  steps:
+  - script: |
+      sudo apt update
+      sudo apt install nodejs -y
+      sudo apt install npm -y
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install
+      node app.js &
+    displayName: 'Run Hello World Application'
+
+  - script: |
+      # Ensure the server has enough time to start
+      sleep 10
+      curl http://localhost:3000
+    displayName: 'Test Server'
+
+  - script: |
+      echo "Hello World application is running successfully"
+    displayName: 'Print Success Message'
